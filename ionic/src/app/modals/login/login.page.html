@@ -1,0 +1,59 @@
+<ion-content padding text-center>
+  <div class="form" style="text-align: center; padding: 10px;">
+
+      <img style="margin:auto; width: 50%; margin-top: 50px;" [src]="logo" alt="">
+      <h4>Login
+      </h4>
+      <h3 class="goodfont">Nika Nika</h3>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+
+          <ion-list margin-top margin-bottom>
+      
+              <ion-item>
+                  <ion-input type="text" tabindex="20" (keyup.enter)="moveFocus(b)" #a placeholder="Email" formControlName="email" type="email" required></ion-input>
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.email.errors?.required">
+                Email is required.
+              </span>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.email.errors?.minlength">
+                Enter correct email format.
+              </span>
+              
+      
+              <ion-item>
+                  <ion-input (keyup.enter)="login()" [type]="passwordType" type="password" #b placeholder="Password" formControlName="password" required></ion-input>
+                  <ion-icon (click)='hideShowPassword()' name="eye" item-right></ion-icon>
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.password.errors?.required">
+                Password is required.
+              </span>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.password.errors?.minlength">
+                Password should be min 4 chars long.
+              </span>
+      
+          </ion-list>
+
+          <br>
+          <div padding>
+            <ion-button  size="large" type="submit" expand="block">LOGIN</ion-button>
+          </div>
+          <br/>
+          <a (click)="goForgot()" style="cursor: pointer;" class="small-text">Forgot Password?</a>
+          <br><br><br>
+      </form>
+    
+      <div margin-top margin-bottom (click)="goRegister()" class="tc flex jusify-center align-center flex-wrap w-100">
+        <div class="w-100 tc flex align-center justify-center">
+            <button class="buttone google flex justify-center align-center" style="font-size: 18px;">REGISTER</button>
+        </div>
+      </div> 
+      <br><br>
+
+      <!-- <div margin-top margin-bottom (click)="loginGmail()" class="tc flex jusify-center align-center flex-wrap w-100">
+          <div class="w-100 tc flex align-center justify-center">
+              <button class="buttone google flex justify-center align-center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" class="flex self-center pr2"  > Login with google</button>
+          </div>
+      </div>  -->
+  </div>
+</ion-content>

@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Chat List</ion-title>
+    <ion-buttons slot="start">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+        <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="form">
+    <div *ngIf="chats.length == 0" style="text-align: center; margin-top: 50px;">
+      No chats as yet 
+    </div>
+    <ion-item *ngFor="let chat of chats">
+      <ion-card style="width: 100%;">
+        <ion-item>
+          <ion-avatar slot="start" style="border: 1px solid lightgray; padding: 2px;">
+            <img [src]="chat.respondent_profile_pic">
+          </ion-avatar>
+          <ion-label>
+            <h3>{{chat.respondent_name}}</h3>
+          </ion-label>
+        </ion-item>
+        <ion-card-header>
+          <ion-card-subtitle *ngIf="chat.last_message_sent_by == authService.getUserId()">You: {{chat.last_message}}</ion-card-subtitle>
+          <ion-card-subtitle *ngIf="chat.last_message_sent_by != authService.getUserId()">{{chat.last_message}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <br/>
+          <p>{{ utils.format_date(chat.created) }}</p>
+        </ion-card-content>
+
+        <ion-footer>
+          <ion-row>
+
+            <!-- <ion-col style="text-align:left">
+              <ion-button horizontal="end" fill="clear" size="small" color="danger" (click)="delete(chat.id)">
+                <ion-icon slot="start" name="close"></ion-icon>
+              </ion-button>
+            </ion-col> -->
+
+            <ion-col style="text-align:right">
+              <ion-button horizontal="end" fill="clear" size="small" color="primary" (click)="notifications(chat.id, chat.creator, chat.respondent)">
+                <ion-icon slot="end" name="mail"></ion-icon>
+              </ion-button>
+            </ion-col>
+
+          </ion-row>
+        </ion-footer>
+      </ion-card>
+    </ion-item>
+
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)"  [disabled]="num_pages < page_number">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    
+  </div>
+</ion-content>

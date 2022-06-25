@@ -1,0 +1,149 @@
+// :host {
+//     ion-content {
+//         --background: url('/assets/background.png') no-repeat;
+//     }
+// }
+// ion-content ::ng-deep ion-scroll {
+//     background-image: url('/assets/background.png')!important;
+//     background-repeat: no-repeat!important;
+//     background-position: center;
+//     background-size: contain;
+// }
+
+input {
+    border: none;
+    background: transparent;
+    padding: 1.125rem 1rem;
+    width: 95%;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    transition: .2s all;
+}
+
+input:not(:last-child) {
+    border-bottom: 2px solid #ECEEEE;
+}
+
+input::placeholder {
+    color: #9DA8AB;
+}
+
+input:focus {
+    outline: none;
+}
+
+input:focus::placeholder {
+    color: #758589;
+}
+
+input.error {
+    color: #F54D3D;
+}
+
+input.success {
+    color: #02C4D9;
+}
+
+ion-content {
+    /*--padding-top: 20px;*/
+    --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  }
+
+/* Remove background transitions for switching themes */
+ion-item {
+--transition: none;
+--inner-border-width: 0px 0px 0px 0px;
+}
+
+ion-item.selected {
+--color: var(--ion-color-primary);
+}
+
+ion-label {
+margin-top: 0px;
+margin-bottom: 0px;
+}
+
+ion-avatar {
+width: 48px;
+height: 48px;
+}
+
+ion-item-options {
+align-items: center;
+}
+/*
+* Material Design Menu
+*/
+.md ion-list {
+padding: 20px 0;
+}
+
+.md ion-list-header {
+padding-left: 18px;
+padding-right: 18px;
+text-transform: uppercase;
+letter-spacing: .1em;
+font-weight: 450;
+font-size: 14px;
+align-items: center;
+}
+
+.md ion-item {
+--padding-start: 18px;
+margin: 0 10px;
+
+font-weight: 450;
+}
+
+.md ion-item.selected {
+--background: rgba(var(--ion-color-primary-rgb), 0.14);
+}
+
+.md ion-item.selected ion-icon {
+color: var(--ion-color-primary);
+}
+
+.md ion-list-header,
+.md ion-item ion-icon {
+color: var(--ion-color-step-650, #5f6368);
+}
+
+ion-list:not(:last-of-type) {
+border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
+}
+
+
+/*
+* iOS Menu
+*/
+.ios ion-list-header {
+padding-left: 16px;
+padding-right: 16px;
+margin-bottom: 8px;
+text-transform: uppercase;
+letter-spacing: .1em;
+font-weight: 450;
+font-size: 14px;
+align-items: center;
+}
+
+.ios ion-list {
+padding: 20px 0;
+}
+
+.ios ion-item {
+--padding-start: 16px;
+--min-height: 50px;
+font-weight: 450;
+}
+
+.ios ion-item ion-icon {
+font-size: 24px;
+color: #73849a;
+}
+
+.ios ion-item.selected ion-icon {
+color: var(--ion-color-primary);
+}

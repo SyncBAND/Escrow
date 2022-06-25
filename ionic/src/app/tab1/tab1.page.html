@@ -1,0 +1,133 @@
+<ion-header translucent no-border>
+  <ion-toolbar>
+    <ion-title>
+      Nika Nika
+    </ion-title>
+    <ion-buttons slot="end" *ngIf="authService.isLoggedIn">
+      <ion-button (click)="user_details()">
+
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+        <!-- <ion-icon slot="icon-only" src="../../assets/checkmark-filled.svg"></ion-icon> -->
+
+       </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ 
+  <div class="form">
+   
+    <div style="text-align: center; cursor: pointer;">
+      <img *ngIf="!authService.isLoggedIn" text-center class="circle" (click)="login_message()" src="{{photo}}" alt="">
+      <img *ngIf="authService.isLoggedIn" text-center class="circle" (click)="capture()" src="{{photo}}" alt="">
+    </div>
+    
+    <ion-list lines="none" class="ion-text-center" *ngIf="authService.isLoggedIn">
+      <span style="text-transform: uppercase;">
+        {{currentUser.get_full_name}}
+      </span>
+    </ion-list>
+
+    <ion-list lines="none" *ngIf="authService.isLoggedIn">
+      <ion-list-header>
+        Share your code below everytime you want to get paid
+      </ion-list-header>
+    </ion-list>
+
+    <ion-list lines="none" class="ion-text-center" *ngIf="authService.isLoggedIn">
+      <ion-label style="font-size: 30px;">
+        {{currentUser.share_code}}
+      </ion-label>
+    </ion-list>
+    
+    <br>
+
+    <ion-list lines="none" class="ion-text-center" *ngIf="authService.isLoggedIn">
+
+      <ion-list-header>
+        Total Money
+      </ion-list-header>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col text-center>
+            <ion-card>
+              <h6 style="text-transform: uppercase;">
+                Recieved
+              </h6>
+              <h3>{{currentUser.money_recieved}}</h3>
+            </ion-card>
+          </ion-col>
+          <ion-col text-center>
+            <ion-card>
+              <h6 style="text-transform: uppercase;">
+                Paid
+              </h6>
+              <h3>{{currentUser.money_paid}}</h3>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
+    </ion-list>
+  
+    <ion-list padding *ngIf="authService.isLoggedIn">
+
+      <ion-item *ngIf="activated" style="color: green; cursor: pointer" (click)="verify_or_update_email()">
+        <ion-icon color="success" slot="start" name="person-circle-outline"></ion-icon>
+            Email is verified: Update here
+      </ion-item>
+      <ion-item *ngIf="activated == false" (click)="verify_or_update_email()" style="color: red; cursor: pointer">
+          <ion-icon color="danger" slot="start" name="person-circle-outline"></ion-icon>
+          Email is not verified: Please check your emails or update here
+          <span slot="end" style="color: tomato;">•</span>
+      </ion-item>
+
+      <ion-item *ngIf="verified_details" style="color: green; cursor: pointer">
+          <ion-icon slot="start" name="documents-outline"></ion-icon>
+          Profile is verified
+      </ion-item>
+
+      <ion-item *ngIf="!verified_details" (click)="verify_details()">
+          <ion-icon slot="start" name="documents-outline"></ion-icon>
+          <span *ngIf="currentUser.verified_details_status == 0" style="color: red; cursor: pointer">Verify your account here</span>
+          <span *ngIf="currentUser.verified_details_status == 1" style="color: blue; cursor: pointer">Processing account details...</span>
+          <span *ngIf="currentUser.verified_details_status == 0" slot="end" style="color: tomato;">•</span>
+      </ion-item>
+
+      <ion-item (click)="user_details()" style="cursor: pointer;">
+          <ion-icon slot="start" name="person"></ion-icon>
+          Edit Profile      
+      </ion-item>
+
+      <ion-item (click)="wallet()" style="cursor: pointer;">
+          <ion-icon slot="start" name="wallet"></ion-icon>
+          Withdraw money      
+      </ion-item>
+
+      <ion-item (click)="security()" style="cursor: pointer;">
+          <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+          Security      
+      </ion-item>
+
+      <ion-item (click)="support()" style="cursor: pointer;">
+          <ion-icon slot="start" name="chatbubble"></ion-icon>
+          Support      
+      </ion-item>
+
+      <ion-item (click)="logout()" style="cursor: pointer;">
+          <ion-icon slot="start" name="log-out"></ion-icon>
+          Logout         
+      </ion-item>
+
+    </ion-list>
+  
+    <ion-list padding *ngIf="!authService.isLoggedIn">
+      <app-login-or-register></app-login-or-register>
+      <br><br>
+    </ion-list>
+
+  </div>
+
+</ion-content>

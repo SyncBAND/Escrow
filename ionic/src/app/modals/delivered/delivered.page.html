@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Delivered</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+       </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> 
+
+<ion-content>
+
+  <div style="text-align: center; padding: 10px; width: 100%;">
+
+    <form [formGroup]="rateForm" (ngSubmit)="rate()" novalidate style="padding: 20px;">
+
+        <ion-list lines="none">
+            <ion-list-header>
+                If your goods were delivered, please let us know.
+            </ion-list-header>
+        </ion-list>
+
+        <ion-list margin-top margin-bottom>
+            <ion-item>
+                <ion-textarea placeholder="Share your feedback (optional)" formControlName="details" rows="3"></ion-textarea>
+            </ion-item>
+        </ion-list>
+
+        <br/><br>
+        <ion-list lines="none">
+          <ion-list-header>
+            Rate the goods/service where 1 is least satisfied and 5 is most satisfied
+          </ion-list-header>
+        </ion-list>
+        <br/><br>
+        <app-ratings [(rating)]="rating"></app-ratings>
+        <br><br>
+        <ion-button type="submit" class="goodfont boton" margin-bottom [mode]="platform"  expand="block" >Submit</ion-button>
+        
+    </form>
+
+  </div>
+</ion-content>

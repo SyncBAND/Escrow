@@ -1,0 +1,5 @@
+npm i @capacitor/dialog
+npm i @capacitor/camera
+npm i @capacitor/core
+npm i @ionic/pwa-elements
+https://gist.github.com/wosephjeber/aa174fb851dfe87e644e?permalink_comment_id=3621858

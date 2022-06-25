@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="type == 'paid'">Paid Transaction</ion-title>
+    <ion-title *ngIf="type == 'recieved'">Incoming Transaction</ion-title>
+
+    <ion-buttons slot="start">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+        <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="pay_again()">
+        <ion-icon slot="icon-only"name="card-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="form">
+    <ion-list lines="none" *ngIf="title != 'Transaction'">
+
+      <ion-card class="ion-text-start">
+        
+        <ion-card-header>
+        </ion-card-header>
+
+        <ion-card-content class="ion-text-center">
+          <div style="text-align: center;" *ngIf="type == 'paid'">
+            <img *ngIf="!transaction.recipient.avatar" text-center class="circle" src="../../../assets/user.png" />
+            <img *ngIf="transaction.recipient.avatar" text-center class="circle" [src]="transaction.recipient.avatar.full_size" />
+          </div>
+          <div style="text-align: center;" *ngIf="type == 'recieved'">
+            <img *ngIf="!transaction.payer.avatar" text-center class="circle" src="../../../assets/user.png" />
+            <img *ngIf="transaction.payer.avatar" text-center class="circle" [src]="transaction.payer.avatar.full_size" />
+          </div>
+        </ion-card-content>
+
+        <ion-card-header class="ion-text-center">
+          <ion-card-title *ngIf="type == 'paid'">{{ transaction.recipient.get_full_name }}</ion-card-title>
+          <ion-card-title *ngIf="type == 'recieved'">{{ transaction.payer.get_full_name }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+
+          <ion-item class="ion-text-center" style="cursor: pointer;" *ngIf="!transaction.goods_delivered && transaction.status == 2 && type == 'paid'" (click)="delivered(transaction.id, transaction.reference)">
+            <ion-card-header style="width: 100%; border: 1px solid grey; cursor: pointer;">
+              Did you receive your goods?
+            </ion-card-header>
+          </ion-item>
+
+          <ion-item class="ion-text-center" *ngIf="transaction.goods_delivered && transaction.status == 2 && !transaction.withdrawn && type == 'recieved'">
+            <ion-card-header *ngIf="transaction.withdrawal_status != 0" style="width: 100%; border: 1px solid grey; cursor: pointer;" (click)="withdraw(transaction.reference, transaction.original_amount)">
+              Withdraw money
+            </ion-card-header>
+            <ion-card-header *ngIf="transaction.withdrawal_status == 0" style="width: 100%; border: 1px solid grey;">
+              Processing withdrawal
+            </ion-card-header>
+          </ion-item>
+          <br/>
+          
+          <ion-list-header>
+            Details
+          </ion-list-header>
+          <ion-item>
+            {{ transaction.details }}
+          </ion-item>
+          <br/>
+          
+          <ion-list-header>
+            Reference
+          </ion-list-header>
+          <ion-item>
+            {{ transaction.reference }}
+          </ion-item>
+          <br/>
+
+          <ion-list-header>
+            Payment status
+          </ion-list-header>
+          <ion-item [style]="'color: ' + transaction.color + ';'">
+            {{ transaction.current_status }}
+          </ion-item>
+          <br/>
+
+          <ion-list-header>
+            Amount
+          </ion-list-header>
+          <ion-item>
+            {{ transaction.original_amount }}
+          </ion-item>
+          <br/>
+
+          <span *ngIf="type == 'paid'">
+            <ion-list-header>
+              Percentage fee
+            </ion-list-header>
+            <ion-item>
+              {{ transaction.percentage_charge }}%
+            </ion-item>
+            <br/>
+            
+            <ion-list-header>
+              Flat fee
+            </ion-list-header>
+            <ion-item>
+              {{ transaction.flat_fee }}
+            </ion-item>
+            <br/>
+
+            <ion-list-header>
+              Total fee charge
+            </ion-list-header>
+            <ion-item>
+              {{ transaction.calculated_charge }}
+            </ion-item>
+            <br/>
+
+            <ion-list-header>
+              Total Amount paid
+            </ion-list-header>
+            <ion-item>
+              {{ transaction.amount }}
+            </ion-item>
+            <br/>
+
+          </span>
+            
+          <span *ngIf="transaction.goods_delivered">
+            <ion-list-header>
+              Goods were delivered
+            </ion-list-header>
+            <ion-item>
+              {{ transaction.goods_delivered_details }}
+            </ion-item>
+            <br/>
+          </span>
+          
+          <ion-list-header>
+            Created
+          </ion-list-header>
+          <ion-item>
+            {{ utils.format_date(transaction.modified) }}
+          </ion-item>
+
+        </ion-card-content>
+
+      </ion-card>
+
+    </ion-list>
+  </div>
+
+</ion-content>

@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="!showSearchbar">Withdrawal details</ion-title>
+
+    <ion-buttons slot="start" *ngIf="!showSearchbar">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+        <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" *ngIf="!showSearchbar">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="showSearch()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-searchbar #search *ngIf="showSearchbar" showCancelButton="always" [(ngModel)]="queryText" (ionChange)="onChange($event)" (ionCancel)="onCancel()" placeholder="Search"></ion-searchbar>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div class="form" *ngIf="authService.isLoggedIn" style="margin-top: 20px;">
+      <ion-list-header *ngIf="transactions.length == 0">
+        <span style="width: 100%; text-align: center;">There are no withdrawals</span>
+      </ion-list-header>
+  </div>
+
+  <div class="form" *ngFor="let transaction of transactions">
+
+    <ion-card class="ion-text-center" style="cursor: pointer;">
+      
+      <ion-card-content>
+          
+        <ion-list-header>
+          Amount
+        </ion-list-header>
+        <ion-item>
+          R{{ transaction.amount }}
+        </ion-item>
+        <br/>
+          
+        <ion-list-header>
+          Payment
+        </ion-list-header>
+        <ion-item>
+          {{ transaction.withdrawal_payment_choices }}
+        </ion-item>
+        <br/>
+        
+        <span *ngIf="transaction.withdrawal_payment == 0">
+          <ion-list-header>
+            Cell number
+          </ion-list-header>
+          <ion-item>
+            {{ transaction.withdrawal_cell_number }}
+          </ion-item>
+          <br/>
+        </span>
+        
+        <span *ngIf="transaction.withdrawal_payment != 0">
+          <ion-list-header>
+            Account type
+          </ion-list-header>
+          <ion-item>
+            {{ transaction.withdrawal_payment_account_type_choices }}
+          </ion-item>
+          <br/>
+          <ion-list-header>
+            Account number
+          </ion-list-header>
+          <ion-item>
+            {{ transaction.withdrawal_account_number }}
+          </ion-item>
+          <br/>
+        </span>
+        
+        <ion-list-header>
+          Withdrawal reference
+        </ion-list-header>
+        <ion-item>
+          {{ transaction.withdrawal_reference }}
+        </ion-item>
+        <br/>
+        
+        <ion-list-header>
+          Status
+        </ion-list-header>
+        <ion-item *ngIf="transaction.status == 0" style="color: blue">
+          {{ transaction.status_choices }}
+        </ion-item>
+        <ion-item *ngIf="transaction.status == 1" style="color: green">
+          {{ transaction.status_choices }}
+        </ion-item>
+        <ion-item *ngIf="transaction.status == 2" style="color: red">
+          {{ transaction.status_choices }}
+        </ion-item>
+        <ion-item *ngIf="transaction.status == 3" style="color: red">
+          {{ transaction.status_choices }}
+        </ion-item>
+        <br/>
+        
+        <span *ngIf="transaction.status_details">
+          <ion-list-header>
+            Status details
+          </ion-list-header>
+          <ion-item>
+            {{ transaction.status_details }}
+          </ion-item>
+          <br/>
+        </span>
+        
+      </ion-card-content>
+
+    </ion-card>
+
+  </div>
+    
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)"  [disabled]="num_pages < page_number">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="light" (click)="scrollToTop()">
+      <ion-icon name="arrow-up"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

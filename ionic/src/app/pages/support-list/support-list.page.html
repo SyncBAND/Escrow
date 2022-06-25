@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Support</ion-title>
+
+    <ion-buttons slot="start">
+        <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+          <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+    
+    <ion-buttons *ngIf="authService.isLoggedIn" slot="end">
+      <ion-button routerLink="/support" routerDirection="root">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+       </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="form">
+  
+    <ion-list padding *ngIf="!authService.isLoggedIn">
+      <app-login-or-register></app-login-or-register>
+    </ion-list>
+
+    <div padding *ngIf="authService.isLoggedIn">
+
+      <div *ngIf="support.length == 0" style="text-align: center; margin-top: 50px">
+        There are no entries as yet...
+      </div>
+
+      <ion-item *ngFor="let entry of support">
+        <ion-card style="width: 100%;">
+          
+          <ion-item>
+            <ion-label>
+              <h3>{{entry.title}}</h3>
+              <p>Type: {{entry.problem}}</p>
+            </ion-label>
+          </ion-item>
+          <ion-slides *ngIf="entry.images.length > 0" style="height: 300px" [options]="slideOptsOne" #slideWithNav  (ionSlideDidChange)="SlideDidChange(sliderOne,slideWithNav)">
+            <ion-slide *ngFor="let img of entry.images">
+                <img [src]="img">
+            </ion-slide>
+          </ion-slides>
+
+          <ion-card-header>
+            <ion-card-subtitle *ngIf="entry.current_status == 'Processing'" style="color: blue;">Status: {{entry.current_status}}</ion-card-subtitle>
+            <ion-card-subtitle *ngIf="entry.current_status == 'Cancelled'" style="color: red;">Status: {{entry.current_status}}</ion-card-subtitle>
+            <ion-card-subtitle *ngIf="entry.current_status == 'Attended'" style="color: green;">Status: {{entry.current_status}}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Modified: {{ utils.format_date(entry.modified) }}</p>
+            <p>Created: {{ utils.format_date(entry.created) }}</p>
+            <br/>
+            {{entry.description}}
+            <br/>
+            <br/>
+            <p>Status details: {{entry.status_details}}</p>
+          </ion-card-content>
+
+          <ion-footer *ngIf="entry.current_status != 'Cancelled'">
+            <ion-row>
+              <ion-col style="text-align:left">
+                <ion-button horizontal="end" fill="clear" size="small" color="danger" (click)="cancel(entry.id)">
+                  <ion-icon slot="start" name="close"></ion-icon>
+                </ion-button>
+              </ion-col>
+              
+              <!-- <ion-col style="text-align:center">
+                <ion-button horizontal="end" fill="clear" size="small" color="primary">
+                  <ion-icon name="calendar"></ion-icon>
+                </ion-button>
+              </ion-col> -->
+
+              <ion-col style="text-align:right">
+                <ion-button horizontal="end" fill="clear" size="small" color="primary" (click)="chat(entry.id)">
+                  <ion-icon slot="end" name="mail"></ion-icon>
+                </ion-button>
+              </ion-col>
+
+            </ion-row>
+          </ion-footer>
+
+        </ion-card>
+      </ion-item>
+
+      <ion-infinite-scroll (ionInfinite)="doInfinite($event)"  [disabled]="num_pages < page_number">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+
+    </div>
+  </div>
+  
+</ion-content>

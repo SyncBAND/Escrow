@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        {% if exists %}
+        <title></title>
+        {% else %}
+        <title>Not permitted</title>
+        {% endif %}
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'api_auth/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    </head>
+
+    <body>
+    {% if not exists %}
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">Not permitted</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h1 class="mt-5">Not permitted</h1>
+                </div>
+            </div>
+        </div>
+        
+    {% else %}
+
+        <script>
+
+            var form = document.createElement("form");
+            form.setAttribute("method", 'post');
+            form.setAttribute("action", {{ redirect }});
+
+            params = {{ data }};
+
+            console.log(params)
+            
+            for(var key in params) {
+                if(params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+                    
+                    form.appendChild(hiddenField);
+                }
+            }
+            document.body.appendChild(form);
+            form.submit();
+
+        </script>
+
+    {% endif %}
+    </body>
+
+</html>

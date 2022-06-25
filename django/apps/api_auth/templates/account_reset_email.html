@@ -1,0 +1,13 @@
+{% load i18n %}
+{% autoescape off %}
+Hi {{ user.name }},
+
+Please click on the link below to change your password
+
+http://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+
+If you did not request to change your password, please ignore this mail.
+
+Regards
+
+{% endautoescape %}

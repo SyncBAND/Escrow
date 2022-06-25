@@ -1,0 +1,232 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Nika Nika</ion-title>
+
+    <ion-buttons slot="end" *ngIf="authService.isLoggedIn">
+      <ion-button (click)="wallet()">
+
+        <ion-icon slot="icon-only" name="wallet"></ion-icon>
+        <!-- <ion-icon slot="icon-only" src="../../assets/checkmark-filled.svg"></ion-icon> -->
+
+       </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div class="form">
+
+    <ion-list lines="none" *ngIf="authService.isLoggedIn">
+
+      <ion-list-header>
+        Payments from other users
+        <ion-label item-end style="text-align: right;" *ngIf="sliderOne.slidesItems.length > 0">
+          <ion-button size="small" fill="outline" slot="end" (click)="view_all('recieved')">
+            all
+          </ion-button>
+        </ion-label>
+      </ion-list-header>
+
+      <ion-grid>
+        <ion-row>
+
+          <ion-col size="1">
+            <span class="slider-nav arrow-prev" (click)="slidePrev(sliderOne,slideWithNav1)" style="width: 100%;">
+              <div class="prev_img custon-nav" [class.disabled]="sliderOne.isBeginningSlide" style="width: 100%;">
+                <ion-icon name="arrow-back" style="float: right;"></ion-icon>
+              </div>
+            </span>
+          </ion-col>
+
+          <ion-col size="10">
+            <ion-slides pager="false" [options]="slideOptsOne" #slideWithNav1
+              (ionSlideDidChange)="SlideDidChange(sliderOne,slideWithNav1)">
+
+              <ion-slide *ngIf="sliderOne.slidesItems.length == 0">
+                <ion-card class="ion-text-start">
+                  
+                  <ion-card-header>
+                  </ion-card-header>
+
+                  <ion-card-content class="ion-text-center">
+                    <ion-avatar slot="start" style="width: 100%;">
+                      <img src="../../../assets/user.png" />
+                    </ion-avatar>
+                  </ion-card-content>
+
+                  <ion-card-header class="ion-text-center">
+                    <ion-card-title>No transactions</ion-card-title>
+                  </ion-card-header>
+
+                </ion-card>
+              </ion-slide>
+
+              <ion-slide *ngFor="let transaction of sliderOne.slidesItems">
+                <ion-card class="ion-text-start" style="width: 100%;">
+
+                  <span (click)="view_history(transaction, 'recieved')" style="cursor: pointer;">
+                    <ion-card-header>
+                    </ion-card-header>
+
+                    <ion-card-content class="ion-text-center">
+                      <ion-avatar slot="start" style="width: 100%;">
+                        <img *ngIf="transaction.payer.avatar" [src]="transaction.payer.avatar.full_size" />
+                        <img *ngIf="!transaction.payer.avatar" src="../../../assets/user.png" />
+                      </ion-avatar>
+                    </ion-card-content>
+
+                    <ion-card-header class="ion-text-center">
+                      <ion-card-title>{{ transaction.payer.get_full_name }}</ion-card-title>
+                      <ion-label>R{{ transaction.original_amount }}</ion-label>
+                    </ion-card-header>
+
+                    <ion-item class="ion-text-center">
+                      <p style="width: 100%; font-size: 14px;">
+                        Payment status: <span [style]="'color: ' + transaction.color + '; margin-left: 5px'"> {{transaction.current_status}}</span>
+                      </p>
+                    </ion-item>
+                    <ion-item class="ion-text-center">
+                      <p style="width: 100%; font-size: 12px;">
+                        {{ utils.format_date(transaction.modified) }}
+                      </p>
+                    </ion-item>
+                  </span>
+
+                  <ion-item class="ion-text-center" *ngIf="transaction.goods_delivered && transaction.status == 2 && !transaction.withdrawn">
+                    <ion-card-header *ngIf="transaction.withdrawal_status != 0" style="width: 100%; border: 1px solid grey; cursor: pointer;" (click)="withdraw(transaction.reference, transaction.original_amount)">
+                      Withdraw money
+                    </ion-card-header>
+                    <ion-card-header *ngIf="transaction.withdrawal_status == 0" style="width: 100%; border: 1px solid grey;">
+                      Processing withdrawal
+                    </ion-card-header>
+                  </ion-item>
+                  <br/>
+
+                </ion-card>
+              </ion-slide>
+              
+            </ion-slides>
+          </ion-col>
+
+          <ion-col size="1">
+            <span class="slider-nav arrow-next" (click)="slideNext(sliderOne,slideWithNav1)">
+              <div class="next_img custon-nav" [class.disabled]="sliderOne.isEndSlide">
+                <ion-icon name="arrow-forward"></ion-icon>
+              </div>
+            </span>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+
+    </ion-list>
+
+    <ion-list lines="none" *ngIf="authService.isLoggedIn">
+
+      <ion-list-header>
+        Payments made by you
+        <ion-label item-end style="text-align: right;" *ngIf="sliderTwo.slidesItems.length > 0">
+          <ion-button size="small" fill="outline" slot="end" (click)="view_all('paid')">
+            all
+          </ion-button>
+        </ion-label>
+      </ion-list-header>
+      
+      <ion-grid>
+        <ion-row>
+
+          <ion-col size="1">
+            <span class="slider-nav arrow-prev" (click)="slidePrev(sliderTwo,slideWithNav2)" style="width: 100%;">
+              <div class="prev_img custon-nav" [class.disabled]="sliderTwo.isBeginningSlide" style="width: 100%;">
+                <ion-icon name="arrow-back" style="float: right;"></ion-icon>
+              </div>
+            </span>
+          </ion-col>
+
+          <ion-col size="10">
+            <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2
+              (ionSlideDidChange)="SlideDidChange(sliderTwo,slideWithNav2)">
+
+              <ion-slide *ngIf="sliderTwo.slidesItems.length == 0">
+                <ion-card class="ion-text-start">
+                  
+                  <ion-card-header>
+                  </ion-card-header>
+
+                  <ion-card-content class="ion-text-center">
+                    <ion-avatar slot="start" style="width: 100%;">
+                      <img src="../../../assets/user.png" />
+                    </ion-avatar>
+                  </ion-card-content>
+
+                  <ion-card-header class="ion-text-center">
+                    <ion-card-title>No transactions</ion-card-title>
+                  </ion-card-header>
+
+                </ion-card>
+              </ion-slide>
+              
+              <ion-slide *ngFor="let transaction of sliderTwo.slidesItems">
+                <ion-card class="ion-text-start" style="width: 100%;">
+
+                  <span style="cursor: pointer;" (click)="view_history(transaction, 'paid')">
+                    <ion-card-content class="ion-text-center">
+                      <ion-avatar slot="start" style="width: 100%;">
+                        <img *ngIf="transaction.recipient.avatar" [src]="transaction.recipient.avatar.full_size" />
+                        <img *ngIf="!transaction.recipient.avatar" src="../../../assets/user.png" />
+                      </ion-avatar>
+                    </ion-card-content>
+
+                    <ion-card-header class="ion-text-center">
+                      <ion-card-title>{{ transaction.recipient.get_full_name }}</ion-card-title>
+                      <ion-label>R{{ transaction.amount }}</ion-label>
+                    </ion-card-header>
+
+                    <ion-item class="ion-text-center">
+                      <p style="width: 100%; font-size: 14px;">
+                        Payment status: <span [style]="'color: ' + transaction.color + '; margin-left: 5px'"> {{transaction.current_status}}</span>
+                      </p>
+                    </ion-item>
+                    <ion-item class="ion-text-center">
+                      <p style="width: 100%; font-size: 12px;">
+                        {{ utils.format_date(transaction.modified) }}
+                      </p>
+                    </ion-item>
+                  </span>
+                  
+                  <ion-item class="ion-text-center" style="cursor: pointer;" *ngIf="!transaction.goods_delivered && transaction.status == 2" (click)="delivered(transaction.id, transaction.reference)">
+                    <ion-card-header style="width: 100%; border: 1px solid grey; cursor: pointer;">
+                      Did you receive your goods?
+                    </ion-card-header>
+                  </ion-item>
+                  <br/>
+
+                </ion-card>
+              </ion-slide>
+              
+            </ion-slides>
+          </ion-col>
+
+          <ion-col size="1">
+            <span class="slider-nav arrow-next" (click)="slideNext(sliderTwo,slideWithNav2)">
+              <div class="next_img custon-nav" [class.disabled]="sliderTwo.isEndSlide">
+                <ion-icon name="arrow-forward"></ion-icon>
+              </div>
+            </span>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+
+    </ion-list>
+  
+    <ion-list padding *ngIf="!authService.isLoggedIn">
+      <app-login-or-register></app-login-or-register>
+      <br><br>
+    </ion-list>
+
+  </div>
+
+</ion-content>

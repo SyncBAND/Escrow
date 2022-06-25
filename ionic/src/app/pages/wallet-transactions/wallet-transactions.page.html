@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="!showSearchbar">Incoming transactions</ion-title>
+
+    <ion-buttons slot="start" *ngIf="!showSearchbar">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+        <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" *ngIf="!showSearchbar">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="showSearch()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-searchbar #search *ngIf="showSearchbar" showCancelButton="always" [(ngModel)]="queryText" (ionChange)="onChange($event)" (ionCancel)="onCancel()" placeholder="Search"></ion-searchbar>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div class="form" *ngIf="authService.isLoggedIn" style="margin-top: 20px;">
+      <ion-list-header *ngIf="transactions.length == 0">
+        <span style="width: 100%; text-align: center;">There is no money to withdraw</span>
+      </ion-list-header>
+  </div>
+
+  <div class="form" *ngFor="let transaction of transactions">
+
+    <ion-card class="ion-text-center" style="cursor: pointer;">
+
+      <ion-card-content>
+        <ion-list-header>
+          Reference
+        </ion-list-header>
+        <ion-item>
+          {{ transaction.transaction.reference }}
+        </ion-item>
+
+        <ion-list-header>
+          Amount
+        </ion-list-header>
+        <ion-item>
+          R{{ transaction.transaction_amount }}
+        </ion-item>
+        
+        <ion-list-header>
+          Withdrawal Status
+        </ion-list-header>
+        <ion-item *ngIf="transaction.transaction.withdrawal_status == 0">
+          Processing withdrawal
+        </ion-item>
+        <ion-item *ngIf="transaction.transaction.withdrawal_status != 0 && transaction.transaction.goods_delivered && !transaction.transaction.withdrawn">
+          You can withdraw
+        </ion-item>
+        <ion-item *ngIf="!transaction.transaction.goods_delivered">
+          Cannot withdraw. Goods are awaiting delivery.
+        </ion-item>
+        <ion-item *ngIf="transaction.transaction.withdrawn">
+          You have already withdrawn
+        </ion-item>
+        
+        <ion-list-header>
+          Status last updated
+        </ion-list-header>
+        <ion-item>
+          {{ utils.format_date(transaction.transaction.modified) }}
+        </ion-item>
+        <br/>
+      </ion-card-content>
+      
+      <ion-item>
+        <ion-button fill="clear" slot="start" (click)="details(transaction.transaction.id)">
+          Details
+        </ion-button>
+        
+        <ion-button *ngIf="transaction.transaction.withdrawal_status != 0 && transaction.transaction.goods_delivered && !transaction.transaction.withdrawn" fill="clear" slot="end" (click)="withdraw(transaction.transaction.reference, transaction.transaction_amount)">
+          Withdraw
+        </ion-button>
+      </ion-item>
+
+    </ion-card>
+
+  </div>
+    
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)"  [disabled]="num_pages < page_number">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="light" (click)="scrollToTop()">
+      <ion-icon name="arrow-up"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

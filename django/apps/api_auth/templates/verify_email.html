@@ -1,0 +1,11 @@
+{% load i18n %}
+{% autoescape off %}
+Hi,
+
+Please click on the link below to verify your email address:
+
+https://{{ domain }}{% url 'api_auth_verify_email' uidb64=uid token=token %}
+
+{{ sign_off }}
+
+{% endautoescape %}

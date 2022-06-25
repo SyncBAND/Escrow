@@ -1,0 +1,79 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+
+    <ion-title>
+        Edit Profile
+    </ion-title>
+
+    <ion-buttons slot="start">
+        <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+          <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+        <ion-button horizontal="end" fill="clear" size="small" (click)="edit()">
+            Save
+        </ion-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="form" style="text-align: center; padding: 10px; margin-top: 50px;">
+
+      <form [formGroup]="userForm" (ngSubmit)="edit()" novalidate>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                  Name
+              </ion-list-header>
+              <ion-item>
+                  <ion-input formControlName="first_name" type="text" placeholder="Tobias" #a (keyup.enter)="moveFocus(b)" required></ion-input>
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.first_name.errors?.required">
+                  Name is required.
+              </span>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.first_name.errors?.minlength">
+                  Name should be min 2 chars long.
+              </span>
+          </ion-list>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                  Last Name
+              </ion-list-header>
+              <ion-item>
+                  <ion-input formControlName="last_name" type="text" placeholder="Sebi" #b (keyup.enter)="moveFocus(c)" required></ion-input>
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.last_name.errors?.required">
+                  Last name is required.
+              </span>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.last_name.errors?.minlength">
+                  Last name should be min 2 chars long.
+              </span>
+          </ion-list>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                  Phone Number
+              </ion-list-header>
+              <ion-item>
+                  <input numberFormatter maxlength="15" type="tel" formControlName="cell" #c (keyup.enter)="save()" placeholder="0821231234">
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.cell.errors?.minlength">
+                  Number needs to be 10 digits long, e.g. 0821231234
+              </span>
+          </ion-list>
+
+          <ion-list lines="none" class="ion-text-center">
+            <ion-button type="submit" shape="round" color="light">
+              Save
+            </ion-button>
+          </ion-list>
+      </form>
+          
+  </div>
+</ion-content>

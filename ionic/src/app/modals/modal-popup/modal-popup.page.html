@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+       </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> 
+
+<ion-content padding text-center>
+
+    <div *ngIf="title=='Cancel'" style="text-align: center; padding: 10px; width: 100%;">
+
+        <form [formGroup]="modalForm" (ngSubmit)="submit()" novalidate style="padding: 20px;">
+            
+            <ion-list margin-top margin-bottom>
+                <ion-item>
+                    <ion-textarea placeholder="Please give us more details" (keyup.enter)="rate()" formControlName="description" rows="3"></ion-textarea>
+                </ion-item>
+                <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.description.errors?.required">Description is required.</span>
+                <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && errorControl.description.errors?.minlength">Description length is too short.</span>
+            </ion-list>
+
+            <br>
+            <ion-button type="submit" class="goodfont boton" margin-bottom expand="block" >{{title}}</ion-button>
+            <br/><br>
+        </form>
+   
+    </div>
+    <div *ngIf="title=='Rate'" style="text-align: center; padding: 10px; width: 100%;">
+
+        <form [formGroup]="rateForm" (ngSubmit)="rate()" novalidate style="padding: 20px;">
+
+            <ion-item>
+                Rate the service 
+            </ion-item>
+            <ion-list margin-top margin-bottom>
+        
+                <ion-item>
+                    <ion-textarea placeholder="Please give us more details (optional)" formControlName="details" rows="3"></ion-textarea>
+                </ion-item>
+                
+            </ion-list>
+
+            <br/><br>
+            <ion-item>
+                <label>Note: 1 is least satisfied and 5 is most satisfied</label>
+            </ion-item>
+            <br/><br>
+            <app-ratings [(rating)]="rating"></app-ratings>
+            <br><br>
+            <ion-button type="submit" class="goodfont boton" margin-bottom  expand="block" >{{title}}</ion-button>
+            
+        </form>
+
+    </div>
+    
+    
+</ion-content>

@@ -1,0 +1,58 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Nika Nika
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="form" style="padding: 10px; margin-top: 50px;">
+
+    <ion-list lines="none" margin-top margin-bottom>
+
+      <ion-list-header>
+          Enter the amount you'd like to pay
+          <ion-label item-end style="text-align: right;">
+            <ion-button size="small" fill="clear" slot="end" (click)="help()">
+              <ion-icon name="information-circle-outline"></ion-icon>
+            </ion-button>
+          </ion-label>
+      </ion-list-header>
+
+      <form [formGroup]="calculateForm" novalidate>
+          <ion-item>
+            <input currencyFormatter formControlName="amount" #a (keyup.enter)="moveFocus(b)" placeholder="Amount">
+          </ion-item>
+          <div style="text-align: center">
+            <span class="error ion-padding" style="color: red;" *ngIf="isCalculatedError">
+              {{calculated_error}}
+            </span>
+          </div>
+      </form>
+    
+    </ion-list>
+        
+    <ion-list lines="none" *ngIf="!hideElement">
+      <ion-list-header>
+          Note: Fee charge is R{{data.calculated_charge}}
+      </ion-list-header>
+      <ion-list-header>
+          Total amount that will be paid: R{{data.calculated_amount}}
+      </ion-list-header>
+    </ion-list>
+        
+    <ion-list lines="none" class="ion-text-center" *ngIf="!hideElement">
+      <ion-button (click)="continue()" shape="round" color="light">
+        Continue
+      </ion-button>
+    </ion-list>
+  
+    <ion-list padding *ngIf="!authService.isLoggedIn">
+      <app-login-or-register></app-login-or-register>
+      <br><br>
+    </ion-list>
+
+  </div>
+</ion-content>

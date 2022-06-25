@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="type == 'paid' && !showSearchbar">Expense Transactions</ion-title>
+    <ion-title *ngIf="type == 'recieved' && !showSearchbar">Incoming Transactions</ion-title>
+
+    <ion-buttons slot="start" *ngIf="!showSearchbar">
+      <ion-button horizontal="end" fill="clear" size="small" routerLink="/tabs/history">
+        <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" *ngIf="!showSearchbar">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="showSearch()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-searchbar #search *ngIf="showSearchbar" showCancelButton="always" [(ngModel)]="queryText" (ionChange)="onChange($event)" (ionCancel)="onCancel()" placeholder="Search"></ion-searchbar>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="form" *ngFor="let transaction of transactions">
+
+    <ion-card class="ion-text-center" style="width: 100%;">
+      
+      <span (click)="view_history(transaction)" style="cursor: pointer;">
+        <ion-card-content class="ion-text-center">
+          <div style="text-align: center;" *ngIf="type == 'recieved'">
+            <img *ngIf="!transaction.payer.avatar" text-center class="circle" src="../../../assets/user.png" />
+            <img *ngIf="transaction.payer.avatar" text-center class="circle" [src]="transaction.payer.avatar.full_size" />
+          </div>
+          <div style="text-align: center;" *ngIf="type == 'paid'">
+            <img *ngIf="!transaction.recipient.avatar" text-center class="circle" src="../../../assets/user.png" />
+            <img *ngIf="transaction.recipient.avatar" text-center class="circle" [src]="transaction.recipient.avatar.full_size" />
+          </div>
+        </ion-card-content>
+
+        <ion-card-header class="ion-text-center">
+          <ion-card-title *ngIf="type == 'recieved'">{{ transaction.payer.get_full_name }}</ion-card-title>
+          <ion-card-title *ngIf="type == 'paid'">{{ transaction.recipient.get_full_name }}</ion-card-title>
+          <ion-label>R{{ transaction.amount }}</ion-label>
+        </ion-card-header>
+        <ion-item class="ion-text-center">
+          <p style="width: 100%; font-size: 14px;">
+            Payment status: <span [style]="'color: ' + transaction.color + '; margin-left: 5px'"> {{transaction.current_status}}</span>
+          </p>
+        </ion-item>
+        <ion-item class="ion-text-center">
+          <p style="width: 100%; font-size: 12px;">
+            {{ utils.format_date(transaction.modified) }}
+          </p>
+        </ion-item>
+      </span>
+
+      <ion-item class="ion-text-center" style="cursor: pointer;" *ngIf="!transaction.goods_delivered && transaction.status == 2 && type == 'paid'" (click)="delivered(transaction.id, transaction.reference)">
+        <ion-card-header style="width: 100%; border: 1px solid grey; cursor: pointer;">
+          Did you receive your goods?
+        </ion-card-header>
+      </ion-item>
+
+      <ion-item class="ion-text-center" *ngIf="transaction.goods_delivered && transaction.status == 2 && !transaction.withdrawn && type == 'recieved'">
+        <ion-card-header *ngIf="transaction.withdrawal_status != 0" style="width: 100%; border: 1px solid grey; cursor: pointer;" (click)="withdraw(transaction.reference, transaction.original_amount)">
+          Withdraw money
+        </ion-card-header>
+        <ion-card-header *ngIf="transaction.withdrawal_status == 0" style="width: 100%; border: 1px solid grey;">
+          Processing withdrawal
+        </ion-card-header>
+      </ion-item>
+      <br/>
+
+    </ion-card>
+
+  </div>
+    
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)"  [disabled]="num_pages < page_number">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="light" (click)="scrollToTop()">
+      <ion-icon name="arrow-up"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

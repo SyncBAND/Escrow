@@ -1,0 +1,118 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+
+    <ion-title>
+        {{ title }}
+    </ion-title>
+
+    <ion-buttons slot="start">
+        <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+          <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+        <ion-button horizontal="end" fill="clear" size="small" (click)="continue()">
+            Continue
+        </ion-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="form" style="text-align: center; padding: 10px; margin-top: 50px;">
+
+      <!-- Spinner : checking recipient_code before showing payment options-->
+      <ion-spinner name="lines" *ngIf="isLoading" style="text-align: center; width: 100%; margin: 90px 0px;"></ion-spinner>
+
+      <form *ngIf="!isLoading" [formGroup]="withdrawalForm" (ngSubmit)="continue()" novalidate>
+
+        <ion-list lines="none" style="border: 1px solid blue;">
+            <ion-list-header>
+                Reference
+            </ion-list-header>
+            <ion-item>
+                {{ withdrawal_reference }}
+                <ion-icon slot="start" name="remove"></ion-icon>
+            </ion-item>
+            <ion-list-header>
+                Withdrawal Amount
+            </ion-list-header>
+            <ion-item>
+                {{ amount }}
+                <ion-icon slot="start" name="remove"></ion-icon>
+            </ion-item>
+            <br/>
+        </ion-list>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                  Select how to receive withdrawal
+              </ion-list-header>
+              <ion-item style="margin-left: 15px;">
+                <ion-label>Withdrawal option</ion-label>
+                <ion-select interface="popover" #a (keyup.enter)="moveFocus(b)" [compareWith]="compareFn" formControlName="withdrawal_payment">
+                  <ion-select-option required *ngFor="let withdrawal_payment_ of withdrawal_payment_options, let i = index" value="{{i}}">
+                    {{withdrawal_payment_}}
+                  </ion-select-option>
+                </ion-select>
+          
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && getControl.withdrawal_payment.errors?.required">
+                Withdrawal option is required
+              </span>
+          </ion-list>
+          <ion-list lines="none" *ngIf="getControl.withdrawal_payment.value == 0">
+              <ion-list-header>
+                  Phone number to get e-wallet
+              </ion-list-header>
+              <ion-item>
+                  <input numberFormatter maxlength="15" type="tel" formControlName="withdrawal_cell_number" #b (keyup.enter)="continue()" placeholder="0821231234">
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && getControl.withdrawal_cell_number.errors?.minlength">
+                  Number needs to be 10 digits long, e.g. 0821231234
+              </span>
+          </ion-list>
+
+          <ion-list lines="none" *ngIf="getControl.withdrawal_payment.value != 0">
+              <ion-list-header>
+                  Account type
+              </ion-list-header>
+              <ion-item style="margin-left: 15px;">
+                <ion-label>Withdrawal account type</ion-label>
+                <ion-select interface="popover" #b (keyup.enter)="moveFocus(c)" [compareWith]="compareFn" formControlName="withdrawal_payment_account" >
+                  <ion-select-option required *ngFor="let withdrawal_payment_account_ of withdrawal_payment_account_type_options, let i = index" value="{{i}}">
+                    {{withdrawal_payment_account_}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && getControl.withdrawal_payment_account.errors?.required">
+                Account type option is required
+              </span>
+          </ion-list>
+
+          <ion-list lines="none" *ngIf="getControl.withdrawal_payment.value != 0">
+              <ion-list-header>
+                  Account number
+              </ion-list-header>
+              <ion-item>
+                  <input numberFormatter maxlength="15" type="tel" formControlName="withdrawal_account_number" #b (keyup.enter)="continue()" placeholder="3457656553">
+              </ion-item>
+              <span class="error ion-padding" style="color: red" *ngIf="isSubmitted && getControl.withdrawal_account_number.errors?.minlength">
+                  Account number seems invalid
+              </span>
+          </ion-list>
+
+          <ion-list lines="none" class="ion-text-center">
+            <ion-button type="submit" shape="round" color="light">
+              Continue
+            </ion-button>
+          </ion-list>
+
+      </form>
+      
+  </div>
+          
+</ion-content>

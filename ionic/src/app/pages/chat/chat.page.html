@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+        <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Notifications</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #content>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" position="top" [disabled]="num_pages < page_number">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <div class="form">
+
+    <div class="chatwindow">
+      
+      <ion-list no-lines  *ngFor = "let notification of notifications; let i = index" text-wrap>
+
+          <ion-item *ngIf="notification.sent_by != user_id">
+            <ion-avatar item-left style="border: 1px solid lightgray; padding: 2px;">
+              <img src="{{ notification.respondent_profile_pic }}">
+            </ion-avatar>
+            <div class="bubble me">
+              <h6 style="white-space: pre-wrap">{{ notification.message }}</h6>
+              <p style="color:blue"><small>{{ utils.format_date(notification.created) }}</small></p>
+              <p><small>{{ notification.respondent_name }}</small></p>
+            </div>
+          </ion-item>
+
+          <ion-item style="float: right;" *ngIf="notification.sent_by == user_id">
+            <div class="bubble you">
+              <h6 style="white-space: pre-wrap">{{ notification.message }}</h6>
+              <p style="color:green"><small>{{ utils.format_date(notification.created) }}</small></p>
+              <p><small>You</small></p>
+            </div>
+            <ion-avatar item-right style="border: 1px solid lightgray; padding: 2px;">
+              <img src="{{notification.creator_profile_pic}}">
+            </ion-avatar>
+          </ion-item>
+          
+      </ion-list>
+    </div>
+  </div>
+  
+</ion-content>
+
+<ion-footer ion-fixed>		
+	<ion-toolbar class="no-border" color="white">	
+    <ion-item>			
+      
+      <ion-textarea type="text" style="font-size:16px" rows="2" [(ngModel)]="newmessage" placeholder="Write your message ..."></ion-textarea>	
+    
+      <ion-button horizontal="end" fill="clear" size="small" color="#95dcfe" (click)="send()" style="margin-top: 20px;">
+        <ion-icon slot="end" name="send"></ion-icon>
+      </ion-button>
+
+    </ion-item>
+	</ion-toolbar>		
+</ion-footer>

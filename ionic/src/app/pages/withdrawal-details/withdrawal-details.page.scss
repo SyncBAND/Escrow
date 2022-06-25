@@ -1,0 +1,27 @@
+
+.md ion-list-header {
+    padding-left: 18px;
+    padding-right: 18px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 450;
+    font-size: 14px;
+}
+    
+/*
+* iOS Menu
+*/
+.ios ion-list-header {
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 450;
+    font-size: 14px;
+}
+
+ion-content {
+    /*--padding-top: 20px;*/
+    --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  }

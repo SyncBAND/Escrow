@@ -1,0 +1,235 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+
+    <ion-title>
+        Verify Profile
+    </ion-title>
+
+    <ion-buttons slot="start">
+        <ion-button horizontal="end" fill="clear" size="small" (click)="back()">
+          <ion-icon slot="end" name="arrow-back-outline"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+        <ion-button horizontal="end" fill="clear" size="small" (click)="save()">
+            Save
+        </ion-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="form" style="padding: 10px; ">
+
+    <form [formGroup]="userForm" novalidate>
+        <span *ngIf="user_verified_profile_case.length > 0">
+            <br/><br/>
+        </span>
+        <ion-list lines="none" style="border: 1px solid tomato;" *ngIf="user_verified_profile_case.length > 0">
+            <ion-list-header>
+                Notifications
+            </ion-list-header>
+            <ion-item *ngFor="let item of user_verified_profile_case">
+                {{ item.details }}
+                <ion-icon slot="start" name="remove"></ion-icon>
+            </ion-item>
+            <br/>
+        </ion-list>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                  Identification
+              </ion-list-header>
+                  
+              <ion-radio-group formControlName="identification">
+                  <ion-item>
+                      <ion-label>Barcoded ID</ion-label>
+                      <ion-radio slot="start" value="barcode"></ion-radio>
+                  </ion-item>
+        
+                  <ion-item>
+                      <ion-label>Smart ID</ion-label>
+                      <ion-radio slot="start" value="smart"></ion-radio>
+                  </ion-item>
+        
+                  <ion-item>
+                      <ion-label>Passport</ion-label>
+                      <ion-radio slot="start" value="passport"></ion-radio>
+                  </ion-item>
+              </ion-radio-group>
+          </ion-list>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                  Upload a clear image or pdf of
+              </ion-list-header>
+              <ion-item *ngIf="getControl.identification.value=='barcode'" style="cursor: pointer;">
+                    <ion-icon slot="start" name="image" (click)="capture('barcoded_id')"></ion-icon>
+                    <span (click)="capture('barcoded_id')">Barcoded ID</span>
+                    <ion-icon (click)="help('barcoded_id')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item *ngIf="getControl.identification.value=='barcode'" style="cursor: pointer;">
+                    <span *ngIf="documents['barcoded_id']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['barcoded_id'] }}
+                    </span>
+                    <span *ngIf="!documents['barcoded_id']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+              <ion-item *ngIf="getControl.identification.value=='passport'" style="cursor: pointer;">
+                    <ion-icon slot="start" name="image" (click)="capture('passport')"></ion-icon>
+                    <span (click)="capture('passport')">Passport</span>
+                    <ion-icon (click)="help('passport')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item *ngIf="getControl.identification.value=='passport'" style="cursor: pointer;">
+                    <span *ngIf="documents['passport_id']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['passport_id'] }}
+                    </span>
+                    <span *ngIf="!documents['passport_id']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+              <ion-item *ngIf="getControl.identification.value=='smart'" style="cursor: pointer;">
+                    <ion-icon slot="start" name="image" (click)="capture('front_smart_id')"></ion-icon>
+                    <span (click)="capture('front_smart_id')">Front of Smart ID</span>
+                    <ion-icon (click)="help('front_smart_id')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item *ngIf="getControl.identification.value=='smart'" style="cursor: pointer;">
+                    <span *ngIf="documents['front_smart_id']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['front_smart_id'] }}
+                    </span>
+                    <span *ngIf="!documents['front_smart_id']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+              <ion-item *ngIf="getControl.identification.value=='smart'" style="cursor: pointer;">
+                    <ion-icon (click)="capture('back_smart_id')" slot="start" name="image"></ion-icon>
+                    <span (click)="capture('back_smart_id')">Back of Smart ID</span>
+                    <ion-icon (click)="help('back_smart_id')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item *ngIf="getControl.identification.value=='smart'" style="cursor: pointer;">
+                    <span *ngIf="documents['back_smart_id']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['back_smart_id'] }}
+                    </span>
+                    <span *ngIf="!documents['back_smart_id']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+              <ion-item style="cursor: pointer;">
+                    <ion-icon (click)="capture('picture_with_id')" slot="start" name="image"></ion-icon>
+                    <span (click)="capture('picture_with_id')">Selfie of your face holding your ID</span>
+                    <ion-icon (click)="help('picture_with_id')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item style="cursor: pointer;">
+                    <span *ngIf="documents['picture_with_id']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['picture_with_id'] }}
+                    </span>
+                    <span *ngIf="!documents['picture_with_id']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+              <ion-item style="cursor: pointer;">
+                    <ion-icon (click)="capture('certified_copy')" slot="start" name="attach"></ion-icon>
+                    <span (click)="capture('certified_copy')">Certified Copy</span>
+                    <ion-icon (click)="help('certified_copy')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item style="cursor: pointer;">
+                    <span *ngIf="documents['certified_copy']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['certified_copy'] }}
+                    </span>
+                    <span *ngIf="!documents['certified_copy']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+          </ion-list>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                Upload image or pdf
+              </ion-list-header>
+              <ion-item style="cursor: pointer;">
+                    <ion-icon (click)="capture('proof_of_address')" slot="start" name="attach"></ion-icon>
+                    <span (click)="capture('proof_of_address')">Proof of residence</span>
+                    <ion-icon (click)="help('proof_of_address')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item style="cursor: pointer;">
+                    <span *ngIf="documents['proof_of_address']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['proof_of_address'] }}
+                    </span>
+                    <span *ngIf="!documents['proof_of_address']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+          </ion-list>
+
+          <ion-list lines="none">
+              <ion-list-header>
+                  Account Type
+              </ion-list-header>
+                  
+              <ion-radio-group formControlName="account_type">
+                  <ion-item>
+                      <ion-label>Individual</ion-label>
+                      <ion-radio slot="start" value="individual"></ion-radio>
+                  </ion-item>
+        
+                  <ion-item>
+                      <ion-label>Company</ion-label>
+                      <ion-radio slot="start" value="company"></ion-radio>
+                  </ion-item>
+              </ion-radio-group>
+          </ion-list>
+
+          <ion-list lines="none" *ngIf="getControl.account_type.value=='company'">
+              <ion-list-header>
+                  Company Details
+              </ion-list-header>
+              <ion-item style="cursor: pointer;">
+                    <ion-icon (click)="capture('company_registration')" slot="start" name="attach"></ion-icon>
+                    <span (click)="capture('company_registration')">Upload a copy of Company Registration Certificate</span>
+                    <ion-icon (click)="help('company_registration')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item style="cursor: pointer;">
+                    <span *ngIf="documents['company_registration']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['company_registration'] }}
+                    </span>
+                    <span *ngIf="!documents['company_registration']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+              <br/>
+              <ion-item style="cursor: pointer;">
+                    <ion-icon (click)="capture('company_proof_of_residence')" slot="start" name="attach"></ion-icon>
+                    <span (click)="capture('company_proof_of_residence')">Upload a copy of Company Proof of Residence</span>
+                    <ion-icon (click)="help('company_proof_of_residence')" slot="end" name="help" style="font-size: 20px;"></ion-icon>
+              </ion-item>
+              <ion-item style="cursor: pointer;">
+                    <span *ngIf="documents['company_proof_of_residence']" class="error ion-padding" style="color: blue; font-size: 12px;">
+                        {{ documents['company_proof_of_residence'] }}
+                    </span>
+                    <span *ngIf="!documents['company_proof_of_residence']" class="error ion-padding" style="color: red; font-size: 12px;">
+                        required
+                    </span>
+              </ion-item>
+          </ion-list>
+
+          <ion-list lines="none" class="ion-text-center" *ngIf="isError">
+            <ion-item>
+                <span class="error ion-padding" style="color: red">
+                    {{error_details}}
+                </span>
+            </ion-item>
+          </ion-list>
+
+          <ion-list lines="none" class="ion-text-center">
+            <ion-button (click)="save()" shape="round" color="light">
+              Save
+            </ion-button>
+          </ion-list>
+      </form>
+          
+  </div>
+</ion-content>
