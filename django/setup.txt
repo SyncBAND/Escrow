@@ -1,0 +1,13 @@
+# Postgres
+brew services start postgresql
+# OR
+brew services stop postgresql
+
+#If you have a specific version, make sure to suffix the version. For example:
+
+brew services start postgresql@13
+
+# postgres -D /usr/local/var/postgres
+# mv /usr/local/var/postgres /usr/local/var/postgres.old
+# initdb -D /usr/local/var/postgres
+# psql postgres

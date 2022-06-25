@@ -3,5 +3,11 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "angular","proxies": [
+    {
+      "path": "/",
+      "proxyUrl": "https://nikanika.metsiapp.co.za",
+      "secure": false
+    }
+  ]
 }

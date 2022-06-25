@@ -1,0 +1,15 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "nikanika",
+	"webDir": "www",
+	"bundledWebRuntime": true,
+	"plugins": {
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		}
+	}
+}

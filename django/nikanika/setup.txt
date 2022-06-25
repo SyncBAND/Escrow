@@ -1,0 +1,78 @@
+sudo ~/Env/nika/bin/uwsgi --emperor /etc/uwsgi/sites --uid metsi --gid metsi
+  120  sudo nano /etc/uwsgi/sites/metsi.ini
+  121  sudo nano /etc/systemd/system/uwsgi.service
+  122  sudo systemctl restart uwsgi
+  123  systemctl daemon-reload
+  124  sudo systemctl daemon-reload
+  125  sudo systemctl restart uwsgi
+  126  sudo systemctl status uwsgi
+  127  sudo chown -R metsi:metsi /var/log/uwsgi/metsi.log
+  128  sudo systemctl restart uwsgi
+  129  sudo systemctl status uwsgi
+  130  ls
+  131  ls /run/uwsgi/
+  132  sudo chgrp -R metsi /run/uwsgi/
+  133  sudo chmod -R g+w /run/uwsgi/
+  134  sudo systemctl restart uwsgi
+  135  sudo systemctl status uwsgi
+  136  ls /run/uwsgi/
+  137  sudo ls /run/uwsgi/
+  138  sudo nano /etc/systemd/system/uwsgi.service
+  touch /var/log/uwsgi/nikanika.log
+  chown metsi:metsi /var/log/uwsgi/nikanika.log
+  screen -d -m celery -A vandm worker -l info
+  
+
+  ./letsencrypt-auto certonly -a standalone -d nikanika.airbuy.africa -d nikaapp.airbuy.africa
+
+  #https://absolutecommerce.co.uk/blog/auto-renew-letsencrypt-nginx-certbot - for ubuntu
+
+sudo yum install python-magic
+# fix - magic_list --https://stackoverflow.com/questions/34541129/mutalyzer-py-test-fails-with-python-magic-error
+
+# fix models.JSONField -- https://stackoverflow.com/questions/37773005/django-programmingerror-in-fields-on-postgresql
+#centos6 ---> sudo yum install screen
+# postgres - stuck items - https://dba.stackexchange.com/questions/217593/drop-table-taking-too-long
+# check for installed postgres - yum list postgres*
+# updating postgres - https://www.postgresql.org/download/linux/redhat/
+# yum -y install -y postgresql12-server -y postgresql12 postgresql13-contrib postgis
+# https://stackoverflow.com/questions/60409585/how-to-upgrade-postgresql-database-from-10-to-12-without-losing-data-for-openpro
+# https://feriman.com/upgrade-postgresql-from-11-to-13-on-centos-7/
+# delete migrations - https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html
+# for six - use
+/usr/pgsql-12/bin/pg_upgrade --old-datadir=/var/lib/pgsql/data/ --new-datadir=/var/lib/pgsql/12/data --old-bindir=/usr/bin --new-bindir=/usr/pgsql-12/bin --old-options '-c config_file=/var/lib/pgsql/data/postgresql.conf' --new-options '-c config_file=/var/lib/pgsql/12/data/postgresql.conf'
+'''
+try: for python 2
+  text_type = unicode
+except: # for python 3
+  text_type = str
+'''
+# solution to: could not open log file "pg_upgrade_internal.log": Permission denied --> Change to a directory that allows the postgres user to create the file e.g cd /tmp && pg_upgrade
+# check - e.g, yum whatprovides '*pg_upgrade' | grep 9.0.6
+  # android - ionic manifest file in application
+  <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic = "true"
+        android:networkSecurityConfig="@xml/network_security_config">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+# @xml/network_security_config
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+<domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="true">metsiapp.co.za</domain>
+    <domain includeSubdomains="true">metsiapp.co.za/api</domain>
+</domain-config>
+</network-security-config>
+
+https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-uwsgi-and-nginx-on-ubuntu-16-04
+
+# payment result - escrow
+curl -X POST http://localhost:8080/api/transactions/payment_result/ -d "m_payment_id=1U3BYATOC&pf_payment_id=1089250&payment_status=COMPLETE&item_name=Testing&amount_gross=5.00&amount_fee=-4.60&amount_net=195.40&email_address=your@email.com&merchant_id=19061831&signature=30c94e185d88ddea9da9d5213cd57b27"

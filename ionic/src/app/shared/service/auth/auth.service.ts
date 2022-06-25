@@ -24,9 +24,9 @@ export class AuthService {
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
   token = '';
   
-    //endpoint: string = 'http://102.130.117.218/api';
+    endpoint: string = 'https://nikanika.metsiapp.co.za/api';
     //endpoint: string = 'http://localhost:8000/api';
-    endpoint: string = 'http://localhost:8080/api';
+    // endpoint: string = 'http://localhost:8080/api';
     headers = new HttpHeaders();
     currentUser = {};
 
